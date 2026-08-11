@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copa Cultural S.A.S.</title>
+<style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,"Times New Roman",serif;background:#f4ead8;color:#4a2d20}
+header{background:#6b3f24;color:white;text-align:center;padding:35px 20px;border-bottom:6px solid #c18b4a}header h1{font-size:48px;margin:0;letter-spacing:2px}header p{font-size:19px;margin-top:10px;font-style:italic}
+nav{background:#8a5632;display:flex;justify-content:center;align-items:center;gap:10px;padding:12px;position:sticky;top:0;z-index:1000}nav a,.dropbtn{color:white;text-decoration:none;padding:10px 15px;border-radius:5px;font-family:Arial,sans-serif;font-weight:bold;cursor:pointer}nav a:hover,.dropbtn:hover{background:#6b3f24}
+.dropdown{position:relative;display:inline-block}.dropdown-content{display:none;position:absolute;background:#fff8ec;min-width:190px;box-shadow:0 5px 12px rgba(0,0,0,.25);border-radius:5px;overflow:hidden;top:42px}.dropdown-content a{color:#4a2d20;display:block;padding:12px}.dropdown-content a:hover{background:#ead5b8}.dropdown:hover .dropdown-content{display:block}
+.cart-button{background:#d29a52;border:none;color:white;padding:11px 18px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:15px}.cart-button:hover{background:#b87b39}
+section{width:88%;max-width:1150px;margin:45px auto}.hero{min-height:420px;display:flex;align-items:center;justify-content:space-between;gap:30px}.hero-text{flex:1}.hero-text h2{font-size:42px;color:#6b3f24}.hero-text p{font-size:19px;line-height:1.7}.hero-image{flex:1}.hero-image img{width:100%;border-radius:12px;box-shadow:4px 5px 12px rgba(0,0,0,.25)}
+.section-title{text-align:center;color:#6b3f24;font-size:34px;margin-bottom:30px}.linea{width:80px;height:4px;background:#c18b4a;margin:10px auto 30px}
+.info-container{display:flex;gap:25px;flex-wrap:wrap}.info-card{background:#fff9ef;flex:1;min-width:280px;padding:25px;border-radius:10px;border-left:6px solid #a96e38;box-shadow:2px 4px 10px rgba(0,0,0,.15)}.info-card h3{color:#75431f}
+.productos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px}.producto{background:#fff9ef;border:1px solid #d5b58d;border-radius:10px;overflow:hidden;box-shadow:2px 4px 10px rgba(0,0,0,.15);transition:transform .2s}.producto:hover{transform:translateY(-5px)}.producto img{width:100%;height:200px;object-fit:cover}.producto-info{padding:20px}.producto h3{color:#6b3f24;font-size:22px}.producto p{line-height:1.5}.precio{font-size:21px;font-weight:bold;color:#9a5b23}.btn{background:#7a4928;color:white;border:none;padding:11px 18px;border-radius:5px;cursor:pointer;font-weight:bold}.btn:hover{background:#512e1b}
+.cultura{display:flex;align-items:center;gap:30px;background:#ead8bc;padding:30px;border-radius:10px}.cultura img{width:45%;border-radius:10px}.cultura-text{flex:1;line-height:1.7}
+.ventana{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.65);overflow:auto}.ventana-contenido{background:#fff8ec;width:90%;max-width:800px;margin:50px auto;padding:30px;border-radius:12px;position:relative;box-shadow:0 8px 25px rgba(0,0,0,.4)}.cerrar{position:absolute;right:20px;top:15px;font-size:28px;cursor:pointer;color:#6b3f24}
+.carrito-item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d5b58d;padding:15px 0}.eliminar{background:#a33b2d;color:white;border:none;padding:6px 10px;border-radius:4px;cursor:pointer}.total{text-align:right;font-size:24px;font-weight:bold;margin-top:20px}
+form{display:flex;flex-direction:column;gap:12px}label{font-weight:bold}input,select,textarea{padding:12px;border:1px solid #c7a77c;border-radius:5px;font-family:Arial,sans-serif;font-size:15px}textarea{min-height:100px;resize:vertical}.mensaje{background:#e0efd9;color:#31572c;padding:15px;border-radius:6px;display:none}
+footer{background:#57331f;color:white;text-align:center;padding:35px 20px;margin-top:50px}footer h3{font-size:25px}.redes{margin-top:15px;font-size:24px}footer p{margin:8px}
+@media(max-width:700px){header h1{font-size:35px}nav{flex-wrap:wrap}.hero{flex-direction:column}.hero-text h2{font-size:32px}.cultura{flex-direction:column}.cultura img{width:100%}}
+
+/* NOTIFICACIÓN FLOTANTE */
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:25px;
+    background:#6b3f24;
+    color:white;
+    padding:13px 18px;
+    border-radius:8px;
+    box-shadow:0 5px 18px rgba(0,0,0,.3);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    z-index:5000;
+    font-family:Arial,sans-serif;
+    font-size:14px;
+    max-width:320px;
+    opacity:0;
+    transform:translateY(20px);
+    transition:opacity .3s ease, transform .3s ease;
+}
+.toast.mostrar{
+    opacity:1;
+    transform:translateY(0);
+}
+.toast-icon{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    background:#d29a52;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    flex-shrink:0;
+}
+.toast-text strong{
+    display:block;
+    margin-bottom:3px;
+}
+.toast-close{
+    margin-left:auto;
+    cursor:pointer;
+    font-size:20px;
+    line-height:1;
+    opacity:.8;
+}
+@media(max-width:700px){
+    .toast{
+        left:15px;
+        right:15px;
+        bottom:18px;
+        max-width:none;
+        font-size:13px;
+    }
+}
+
+
+@media(max-width:700px){
+    .toast{
+        right:15px;
+        bottom:15px;
+        max-width:260px;
+        font-size:13px;
+    }
+}
+
+</style>
+</head>
+<body>
+<header id="inicio"><h1>☕ Copa Cultural</h1><p>"El sabor que lleva la cultura en cada copa."</p></header>
+<nav>
+<a href="#inicio">Inicio</a>
+<div class="dropdown"><span class="dropbtn">Nuestra empresa ▾</span><div class="dropdown-content"><a href="#mision">Misión</a><a href="#vision">Visión</a><a href="#objeto">Objeto social</a></div></div>
+<div class="dropdown"><span class="dropbtn">Productos ▾</span><div class="dropdown-content"><a href="#productos">Bebidas</a><a href="#artesanias">Cultura</a></div></div>
+<div class="dropdown"><span class="dropbtn">Pedidos ▾</span><div class="dropdown-content"><a href="#" onclick="abrirPedido()">Realizar pedido</a><a href="#" onclick="abrirCarrito()">Ver carrito</a></div></div>
+<a href="#contacto">Contacto</a>
+<button class="cart-button" onclick="abrirCarrito()">🛒 Carrito <span id="contador">0</span></button>
+</nav>
+<section class="hero">
+<div class="hero-text"><h2>Tradición que se disfruta</h2><p>En <strong>Copa Cultural S.A.S.</strong> creemos que una bebida puede ser mucho más que una bebida.</p><p>Nuestra propuesta combina bebidas calientes y frías con productos que representan la identidad cultural y artesanal de Boyacá.</p><button class="btn" onclick="abrirPedido()">Hacer un pedido</button></div>
+<div class="hero-image"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80" alt="Café artesanal"></div>
+</section>
+<section id="mision"><h2 class="section-title">Nuestra empresa</h2><div class="linea"></div><div class="info-container">
+<div class="info-card"><h3>🎯 Misión</h3><p>Copa Cultural S.A.S. tiene como misión elaborar y comercializar bebidas calientes y frías, acompañadas de productos que representen la identidad cultural y artesanal de Boyacá, ofreciendo alternativas de calidad, accesibles y atractivas para estudiantes, docentes y público en general.</p><p>La empresa busca satisfacer las necesidades de sus clientes mediante una propuesta que combine el consumo de bebidas con la promoción, valoración y difusión de las tradiciones culturales de la región.</p></div>
+<div class="info-card" id="vision"><h3>👁️ Visión</h3><p>En un período de 3 a 5 años, Copa Cultural S.A.S. buscará consolidarse como un emprendimiento reconocido en el ámbito escolar y local por la calidad de sus bebidas y por su capacidad para integrar el consumo con la identidad cultural de Boyacá.</p><p>La empresa proyecta fortalecer su presencia en el mercado mediante la innovación, la atención al cliente y el desarrollo de productos que contribuyan a preservar y difundir las tradiciones de la región.</p></div>
+<div class="info-card" id="objeto"><h3>📋 Objeto social</h3><p>Copa Cultural S.A.S. tiene como objeto la elaboración y comercialización de bebidas calientes y frías, complementadas con productos de identidad cultural y artesanal de Boyacá, dirigidos principalmente a la comunidad estudiantil y al público en general.</p><p>El propósito es ofrecer una experiencia de consumo que promueva y valore la cultura y las tradiciones de la región.</p></div>
+</div></section>
+<section id="productos"><h2 class="section-title">Nuestros productos</h2><div class="linea"></div><div class="productos">
+<div class="producto"><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=700&q=80" alt="Café"><div class="producto-info"><h3>☕ Café Boyacense</h3><p>Café caliente ideal para acompañar una jornada de estudio, trabajo o una buena conversación.</p><p class="precio">$6.000</p><button class="btn" onclick="agregarCarrito('Café Boyacense',6000)">Agregar al carrito</button></div></div>
+<div class="producto"><img src="https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=700&q=80" alt="Chocolate caliente"><div class="producto-info"><h3>🍫 Chocolate Tradicional</h3><p>Chocolate caliente inspirado en las bebidas tradicionales de nuestra región.</p><p class="precio">$7.000</p><button class="btn" onclick="agregarCarrito('Chocolate Tradicional',7000)">Agregar al carrito</button></div></div>
+<div class="producto"><img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=700&q=80" alt="Limonada"><div class="producto-info"><h3>🍋 Limonada de Panela</h3><p>Una bebida fría y refrescante preparada con panela, perfecta para los días calurosos.</p><p class="precio">$5.000</p><button class="btn" onclick="agregarCarrito('Limonada de Panela',5000)">Agregar al carrito</button></div></div>
+<div class="producto"><img src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=700&q=80" alt="Aromática"><div class="producto-info"><h3>🌿 Aromática Andina</h3><p>Bebida caliente con una selección de ingredientes aromáticos para disfrutar en cualquier momento.</p><p class="precio">$5.000</p><button class="btn" onclick="agregarCarrito('Aromática Andina',5000)">Agregar al carrito</button></div></div>
+</div></section>
+<section id="artesanias"><h2 class="section-title">Cultura y artesanía</h2><div class="linea"></div><div class="cultura"><img src="https://images.unsplash.com/photo-1604328471151-b52226907017?auto=format&fit=crop&w=800&q=80" alt="Artesanía"><div class="cultura-text"><h2>Boyacá en cada detalle</h2><p>Copa Cultural S.A.S. busca que cada compra sea una oportunidad para conocer y valorar la cultura de Boyacá.</p><p>Por medio de productos artesanales y elementos representativos de nuestra región queremos apoyar el talento local y mantener vivas nuestras tradiciones.</p><p>Nuestra propuesta une gastronomía, cultura y emprendimiento en una sola experiencia.</p></div></div></section>
+<section id="contacto"><h2 class="section-title">📞 Contáctanos</h2><div class="linea"></div><div class="info-container"><div class="info-card"><h3>📍 Ubicación</h3><p>Tunja, Boyacá, Colombia</p></div><div class="info-card"><h3>📧 Correo</h3><p>copacultural@gmail.com</p></div><div class="info-card"><h3>📱 Atención</h3><p>Atención a estudiantes, docentes y público en general.</p></div></div></section>
+
+<div id="ventanaCarrito" class="ventana"><div class="ventana-contenido"><span class="cerrar" onclick="cerrarCarrito()">×</span><h2>🛒 Mi carrito</h2><div id="listaCarrito"><p>Tu carrito está vacío.</p></div><div class="total">Total: $<span id="total">0</span></div><br><button class="btn" onclick="abrirPedido()">Continuar con el pedido</button></div></div>
+
+<div id="ventanaPedido" class="ventana"><div class="ventana-contenido"><span class="cerrar" onclick="cerrarPedido()">×</span><h2>📝 Realizar pedido</h2><p>Completa la siguiente información para registrar tu pedido.</p><form id="formularioPedido" onsubmit="enviarPedido(event)"><label>Nombre completo</label><input type="text" id="nombre" placeholder="Escribe tu nombre" required><label>Correo electrónico</label><input type="email" id="correo" placeholder="ejemplo@gmail.com" required><label>Teléfono</label><input type="tel" id="telefono" placeholder="Número de contacto" required><label>Tipo de pedido</label><select id="tipoPedido"><option>Para recoger</option><option>Entrega en el colegio</option><option>Pedido para evento</option></select><label>Observaciones</label><textarea id="observaciones" placeholder="Escribe alguna indicación especial"></textarea><button class="btn" type="submit">Confirmar pedido</button></form><div id="mensajePedido" class="mensaje"></div></div></div>
+
+<footer><h3>☕ COPA CULTURAL S.A.S.</h3><p>"El sabor que lleva la cultura en cada copa."</p><p>Tradición • Cultura • Gastronomía • Boyacá</p><div class="redes">📱 &nbsp; 📧 &nbsp; 📍</div><p>© 2026 Copa Cultural S.A.S.</p></footer>
+
+<script>
+let carrito=[];
+function agregarCarrito(nombre,precio){
+    carrito.push({nombre,precio});
+    actualizarCarrito();
+    mostrarToast(nombre + " fue agregado al carrito.");
+}
+
+function mostrarToast(mensaje){
+    const toast = document.getElementById("toast");
+    const texto = document.getElementById("toastTexto");
+
+    texto.textContent = mensaje;
+    toast.classList.add("mostrar");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(function(){
+        toast.classList.remove("mostrar");
+    }, 2500);
+}
+
+function actualizarCarrito(){const lista=document.getElementById("listaCarrito"),contador=document.getElementById("contador"),totalElemento=document.getElementById("total");contador.textContent=carrito.length;if(carrito.length===0){lista.innerHTML="<p>Tu carrito está vacío.</p>";totalElemento.textContent="0";return;}lista.innerHTML="";let total=0;carrito.forEach((producto,index)=>{total+=producto.precio;const item=document.createElement("div");item.className="carrito-item";item.innerHTML=`<div><strong>${producto.nombre}</strong><br>$${producto.precio.toLocaleString("es-CO")}</div><button class="eliminar" onclick="eliminarProducto(${index})">Eliminar</button>`;lista.appendChild(item);});totalElemento.textContent=total.toLocaleString("es-CO");}
+function eliminarProducto(index){carrito.splice(index,1);actualizarCarrito();}
+function abrirCarrito(){actualizarCarrito();document.getElementById("ventanaCarrito").style.display="block";}
+function cerrarCarrito(){document.getElementById("ventanaCarrito").style.display="none";}
+function abrirPedido(){cerrarCarrito();document.getElementById("ventanaPedido").style.display="block";}
+function cerrarPedido(){document.getElementById("ventanaPedido").style.display="none";}
+function enviarPedido(event){event.preventDefault();if(carrito.length===0){alert("Primero debes agregar al menos un producto al carrito.");return;}const nombre=document.getElementById("nombre").value;const mensaje=document.getElementById("mensajePedido");mensaje.style.display="block";mensaje.innerHTML=`<strong>¡Pedido registrado correctamente!</strong><p>Gracias ${nombre}. Hemos recibido tu solicitud. Copa Cultural S.A.S. se pondrá en contacto contigo para confirmar el pedido.</p>`;document.getElementById("formularioPedido").reset();carrito=[];actualizarCarrito();}
+window.onclick=function(event){if(event.target===document.getElementById("ventanaCarrito"))cerrarCarrito();if(event.target===document.getElementById("ventanaPedido"))cerrarPedido();}
+
+let toastTimer;
+
+function mostrarToast(nombre){
+    const toast = document.getElementById("toast");
+    const titulo = document.getElementById("toastTitulo");
+    const texto = document.getElementById("toastTexto");
+
+    titulo.textContent = nombre;
+    texto.textContent = "Agregado al carrito.";
+
+    toast.classList.add("mostrar");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(function(){
+        ocultarToast();
+    }, 3000);
+}
+
+function ocultarToast(){
+    document.getElementById("toast").classList.remove("mostrar");
+}
+
+</script>
+</body>
+</html>
